@@ -36,6 +36,9 @@ object SparkStreamingTest {
 
     print(consumerKey, consumerSecret, accessToken, accessTokenSecret)
 
+    assert(consumerKey != "" && consumerSecret != "" && accessToken != "" && accessTokenSecret != "",
+      "Fill in twitter_auth.yaml with credentials from: https://apps.twitter.com")
+
     val config = new SparkConf()
       .setAppName("twitter-stream-sentiment")
       .setMaster("local[2]") // Use 2 cores on the local machine
