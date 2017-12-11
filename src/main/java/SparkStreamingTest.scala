@@ -40,7 +40,7 @@ object SparkStreamingTest {
       "Fill in twitter_auth.yaml with credentials from: https://apps.twitter.com")
 
     val config = new SparkConf()
-      .setAppName("twitter-stream-sentiment")
+      .setAppName("twitter-spark-streaming")
       .setMaster("local[2]") // Use 2 cores on the local machine
       .set("spark.sql.parquet.mergeSchema", "true")
 
@@ -56,10 +56,11 @@ object SparkStreamingTest {
     val ssc = new StreamingContext(sc, batchSize)
     val stream = TwitterUtils.createStream(ssc, None)
 
-    // Get the singleton instance of SQLContext
+    // Get the instance of SQLContext, reuse it if it already exists
     val sqlContext = SQLContext.getOrCreate(sc)
     import sqlContext.implicits._
 
+    // As a test, only grab tweets in [English, French or Italian]
     val languagesToWrite = List("en", "fr", "it")
 
     stream
@@ -96,7 +97,7 @@ object SparkStreamingTest {
         .format("parquet")
         .option("compression","snappy")
         .mode(SaveMode.Append)
-        .save("/Users/Matthew/twitter/table")
+        .save("twitter/table")
     })
 
     ssc.start()
