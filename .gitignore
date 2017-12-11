@@ -1,3 +1,6 @@
+src/main/resources/twitter_auth.yaml
+
+
 **.idea
 src/test/
 target/generated-sources/
